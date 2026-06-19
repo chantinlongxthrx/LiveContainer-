@@ -23,7 +23,7 @@ Crowdin Project: [![Crowdin](https://badges.crowdin.net/livecontainer/localized.
 > We have recently noticed the appearance of certain closed-source third-party builds of LiveContainer. Please be aware that all your apps are installed within LiveContainer, which means these third-party builds **have full access to your data, including sensitive information such as keychain items and login credentials**. 
 > 
 > Furthermore, please note that we do not provide any support for issues of these third-party builds.
-
+>this is a third party build
 
 # Installation
 **LiveContainer comes with a standalone version and a version with built-in SideStore. [Please read the install guide here](https://livecontainer.github.io/docs/installation)**
