@@ -4,34 +4,167 @@
 <dict>
 	<key>application-identifier</key>
 	<string>$(DEVELOPMENT_TEAM).$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
 	<key>com.apple.developer.healthkit</key>
 	<true/>
+
 	<key>com.apple.developer.healthkit.access</key>
 	<array>
 		<string>health-records</string>
 	</array>
+
 	<key>com.apple.developer.healthkit.background-delivery</key>
 	<true/>
+
 	<key>com.apple.developer.kernel.extended-virtual-addressing</key>
 	<true/>
+
 	<key>com.apple.developer.kernel.increased-memory-limit</key>
 	<true/>
+
 	<key>com.apple.developer.team-identifier</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
+
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>$(APP_GROUP_SIDESTORE)</string>
 		<string>$(APP_GROUP_ALTSTORE)</string>
 	</array>
+
 	<key>get-task-allow</key>
 	<true/>
+
 	<key>keychain-access-groups</key>
 	<array>
-		<!-- Base keychain group -->
 		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared</string>
-		<!-- Numbered keychain groups (0-127) generated at build time -->
-		<!-- Use a build script to generate these entries dynamically -->
-		<!-- See: scripts/generate-keychain-groups.sh -->
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared0</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared1</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared2</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared3</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared4</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared5</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared6</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared7</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared8</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared9</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared10</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared11</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared12</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared13</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared14</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared15</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared16</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared17</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared18</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared19</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared20</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared21</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared22</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared23</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared24</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared25</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared26</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared27</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared28</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared29</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared30</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared31</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared32</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared33</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared34</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared35</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared36</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared37</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared38</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared39</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared40</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared41</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared42</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared43</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared44</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared45</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared46</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared47</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared48</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared49</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared50</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared51</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared52</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared53</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared54</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared55</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared56</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared57</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared58</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared59</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared60</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared61</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared62</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared63</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared64</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared65</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared66</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared67</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared68</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared69</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared70</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared71</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared72</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared73</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared74</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared75</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared76</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared77</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared78</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared79</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared80</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared81</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared82</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared83</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared84</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared85</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared86</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared87</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared88</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared89</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared90</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared91</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared92</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared93</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared94</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared95</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared96</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared97</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared98</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared99</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared100</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared101</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared102</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared103</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared104</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared105</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared106</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared107</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared108</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared109</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared110</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared111</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared112</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared113</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared114</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared115</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared116</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared117</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared118</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared119</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared120</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared121</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared122</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared123</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared124</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared125</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared126</string>
+		<string>$(AppIdentifierPrefix)com.kdt.livecontainer.shared127</string>
 	</array>
 </dict>
 </plist>
