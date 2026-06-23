@@ -75,6 +75,12 @@
 		<string>livecontainer</string>
 		<string>livecontainer2</string>
 		<string>livecontainer3</string>
+		<string>localdevvpn</string>
+		<string>stikpair</string>
+		<string>stikjit</string>
+		<string>stikdebug</string>
+		<string>feather</string>
+		<string>ksign</string>
 	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>

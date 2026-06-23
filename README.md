@@ -210,3 +210,4 @@ Open Xcode, edit `DEVELOPMENT_TEAM[config=Debug]` in `xcconfigs/Global.xcconfig`
 - @slds1 for dynamic color feature
 - @Vishram1123 for iOS 26+ JIT Script Support
 - @StephenDev0 for AltStore source support
+- 😀

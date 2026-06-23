@@ -9,6 +9,32 @@ import Foundation
 import SwiftUI
 import UserNotifications
 
+enum SigningAppPreference : Int, CaseIterable, Identifiable {
+    var id: Int { rawValue }
+    case sideStore = 0
+    case feather = 1
+    case ksign = 2
+    
+    var displayName: String {
+        switch self {
+        case .sideStore: "SideStore (built-in)"
+        case .feather: "Feather"
+        case .ksign: "Ksign"
+        }
+    }
+    
+    /// Only Feather and Ksign are launched externally; SideStore's refresh
+    /// already runs through LiveContainer's own SideStore framework and
+    /// doesn't need a launch button.
+    var urlScheme: String? {
+        switch self {
+        case .sideStore: nil
+        case .feather: "feather"
+        case .ksign: "ksign"
+        }
+    }
+}
+
 enum JITEnablerType : Int, CaseIterable, Identifiable {
     var id: Int { rawValue }
     case SideJITServer = 0
@@ -37,6 +63,8 @@ struct LCSettingsView: View {
     @State var errorInfo = ""
     @State var successShow = false
     @State var successInfo = ""
+    @State var isConnectingVPN = false
+    @ObservedObject var updateChecker = CompanionAppUpdateChecker.shared
     
     @Binding var appDataFolderNames: [String]
 
@@ -59,6 +87,7 @@ struct LCSettingsView: View {
     @AppStorage("LCSideJITServerAddress", store: LCUtils.appGroupUserDefault) var sideJITServerAddress : String = ""
     @AppStorage("LCDeviceUDID", store: LCUtils.appGroupUserDefault) var deviceUDID: String = ""
     @AppStorage("LCJITEnablerType", store: LCUtils.appGroupUserDefault) var JITEnabler: JITEnablerType = .SideJITServer
+    @AppStorage("LCSigningAppPreference", store: LCUtils.appGroupUserDefault) var signingAppPreference: SigningAppPreference = .sideStore
     
     @State var store : Store = .Unknown
     
@@ -261,6 +290,112 @@ struct LCSettingsView: View {
                     } label: {
                         Text("lc.settings.clearNotifications".loc)
                     }
+                }
+
+                Section {
+                    Picker("Preferred Signing App", selection: $signingAppPreference) {
+                        ForEach(SigningAppPreference.allCases) { pref in
+                            Text(pref.displayName).tag(pref)
+                        }
+                    }
+                    
+                    if let scheme = signingAppPreference.urlScheme {
+                        Button {
+                            openExternalSigningApp(scheme: scheme, displayName: signingAppPreference.displayName)
+                        } label: {
+                            Text("Open \(signingAppPreference.displayName)")
+                        }
+                    }
+                } header: {
+                    Text("Signing / Install App")
+                } footer: {
+                    Text("SideStore's refresh runs automatically through LiveContainer's built-in framework. Feather and Ksign are separate apps for manual signing/installing - selecting one here just gives it a launch button, since neither exposes a way for LiveContainer to trigger them remotely.")
+                }
+
+                Section {
+                    Button {
+                        openStikPair()
+                    } label: {
+                        Text("Pair Device (StikPair)")
+                    }
+                } header: {
+                    Text("Device Pairing")
+                } footer: {
+                    Text("Opens StikPair to generate a pairing file on-device. Requires the StikPair app to be installed. Pairing is manual: pair via Settings › Privacy & Security › Developer Mode, then export the file from StikPair.")
+                }
+
+                Section {
+                    Button {
+                        Task { await CompanionAppUpdateChecker.shared.checkAll() }
+                    } label: {
+                        if updateChecker.isChecking {
+                            HStack {
+                                Text("Check for Updates")
+                                Spacer()
+                                ProgressView()
+                            }
+                        } else {
+                            Text("Check for Updates")
+                        }
+                    }
+                    .disabled(updateChecker.isChecking)
+                    
+                    ForEach(CompanionAppRepos.all) { repo in
+                        if let result = updateChecker.results[repo.id] {
+                            switch result {
+                            case .success(let info):
+                                Button {
+                                    UIApplication.shared.open(info.releaseURL)
+                                } label: {
+                                    HStack {
+                                        Text(repo.displayName)
+                                            .foregroundStyle(.primary)
+                                        Spacer()
+                                        Text(info.version)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                            case .failure:
+                                HStack {
+                                    Text(repo.displayName)
+                                    Spacer()
+                                    Text("Check failed")
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Companion App Updates")
+                } footer: {
+                    Text("Checks LocalDevVPN, StikPair, and StikDebug's GitHub repos for the latest release. This only checks and links out - LiveContainer can't install updates for other apps directly, so you'll still sideload the new version the normal way. StikPair's repo couldn't be confirmed automatically; if its check fails, the owner/repo may need correcting in CompanionAppUpdateChecker.swift.")
+                }
+
+                Section {
+                    Button {
+                        Task { await connectLocalDevVPNAndRefresh() }
+                    } label: {
+                        if isConnectingVPN {
+                            HStack {
+                                Text("Connect Local Dev VPN & Refresh")
+                                Spacer()
+                                ProgressView()
+                            }
+                        } else {
+                            Text("Connect Local Dev VPN & Refresh")
+                        }
+                    }
+                    .disabled(isConnectingVPN)
+                    
+                    Button(role: .destructive) {
+                        LocalDevVPNBridge.shared.disconnect()
+                    } label: {
+                        Text("Disconnect Local Dev VPN")
+                    }
+                } header: {
+                    Text("Local Dev VPN")
+                } footer: {
+                    Text("Connects LocalDevVPN's local tunnel so a signing server only reachable through it can be used, then refreshes your apps. Requires the LocalDevVPN app to be installed.")
                 }
 
                 Section {
@@ -483,6 +618,39 @@ struct LCSettingsView: View {
         } else {
             UIApplication.shared.applicationIconBadgeNumber = 0
         }
+    }
+
+    func connectLocalDevVPNAndRefresh() async {
+        isConnectingVPN = true
+        defer { isConnectingVPN = false }
+        switch await LocalDevVPNBridge.shared.connectAndRefresh() {
+        case .notInstalled:
+            errorInfo = "LocalDevVPN doesn't appear to be installed."
+            errorShow = true
+        case .connectedOnly, .connectedAndRefreshed:
+            successInfo = "Connected LocalDevVPN and started refreshing your apps."
+            successShow = true
+        }
+    }
+
+    @MainActor
+    func openStikPair() {
+        guard let url = URL(string: "stikpair://"), UIApplication.shared.canOpenURL(url) else {
+            errorInfo = "StikPair doesn't appear to be installed."
+            errorShow = true
+            return
+        }
+        UIApplication.shared.open(url)
+    }
+    
+    @MainActor
+    func openExternalSigningApp(scheme: String, displayName: String) {
+        guard let url = URL(string: "\(scheme)://"), UIApplication.shared.canOpenURL(url) else {
+            errorInfo = "\(displayName) doesn't appear to be installed."
+            errorShow = true
+            return
+        }
+        UIApplication.shared.open(url)
     }
 
     func export() {

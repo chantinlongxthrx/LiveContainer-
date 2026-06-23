@@ -1,3 +1,4 @@
+```bash
 # copy lc
 wget https://github.com/LiveContainer/SideStore/releases/download/dylibify/dylibify
 chmod +x dylibify
@@ -7,7 +8,7 @@ brew install ldid
 mv "$archive_path.xcarchive/Products/Applications" Payload
 
 # temporarily move sidestore support framrwork to tmp before zip
-mkdir tmp
+mkdir -p tmp
 mv Payload/LiveContainer.app/Frameworks/SideStore.framework ./tmp
 
 zip -r "$scheme.ipa" "Payload" -x "._*" -x ".DS_Store" -x "__MACOSX"
@@ -41,7 +42,7 @@ mv ./tmp/SideStore.framework Payload/LiveContainer.app/Frameworks
 
 # download SideStore
 cd tmp
-wget https://github.com/LiveContainer/SideStore/releases/download/nightly/SideStore.ipa
+wget https://github.com/LiveContainer/SideStore/releases/download/nightly/SideStore.ipa || curl -L -O https://github.com/LiveContainer/SideStore/releases/download/nightly/SideStore.ipa
 unzip SideStore.ipa
 cd ..
 
@@ -66,10 +67,12 @@ cp -r ./Payload/LiveContainer.app/Frameworks/SideStoreApp.framework/Frameworks .
 mv ./Payload/LiveContainer.app/PlugIns/LiveWidgetExtension.appex/AltWidgetExtension ./Payload/LiveContainer.app/PlugIns/LiveWidgetExtension.appex/LiveWidgetExtension
 
 # Sign
-rm -r .zsign_cache
-find payloadlc/Payload -type d -name "_CodeSignature" -exec rm -r {} +
+rm -rf .zsign_cache # Force remove so it doesn't crash if folder doesn't exist
+find Payload -type d -name "_CodeSignature" -exec rm -rf {} + # Corrected 'payloadlc/Payload' typo to 'Payload'
 
 ldid -S.github/sidelc/LiveWidgetExtension_adhoc.xml ./Payload/LiveContainer.app/PlugIns/LiveWidgetExtension.appex/LiveWidgetExtension
 
 # package
 zip -r "$scheme+SideStore.ipa" "Payload" -x "._*" -x ".DS_Store" -x "__MACOSX"
+
+```
