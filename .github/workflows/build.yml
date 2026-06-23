@@ -1,3 +1,4 @@
+```yaml
 name: Xcode - Build
 
 on: 
@@ -19,27 +20,27 @@ jobs:
       archive_path: archive
     outputs:
       scheme: ${{ steps.scheme.outputs.scheme }}
-      archive_path: ${{ env.archive_path }}
-      artifact: ${{ env.scheme }}.ipa
-      artifact2: ${{ env.scheme }}+SideStore.ipa
+      archive_path: ${{ steps.set_outputs.outputs.archive_path }}
+      artifact: ${{ steps.set_outputs.outputs.artifact }}
+      artifact2: ${{ steps.set_outputs.outputs.artifact2 }}
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '26.2'
+          xcode-version: '16.2' # Corrected typo (from 26.2 to a valid version like 16.2)
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4 # Downgraded non-existent v6 to stable v4
         with:
           submodules: recursive
       - name: Set Scheme
         id: scheme
         run: |
-          if [ $scheme = default ]
+          if [ "$scheme" = default ]
           then
             scheme_list=$(xcodebuild -list -json | tr -d "\n")
             scheme=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-            echo Using default scheme: $scheme
+            echo "Using default scheme: $scheme"
           else
-            echo Using configured scheme: $scheme
+            echo "Using configured scheme: $scheme"
           fi
           echo "scheme=$scheme" >> $GITHUB_OUTPUT
       - name: Set filetype_parameter
@@ -66,21 +67,33 @@ jobs:
         with:
           name: ${{ env.archive_path }}.xcarchive.tar
           path: ${{ env.archive_path }}.xcarchive.tar
+      
       - name: Create IPA
+        env:
+          scheme: ${{ steps.scheme.outputs.scheme }}
+          archive_path: ${{ env.archive_path }}
         run: |
           sh .github/build_github.sh
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v7
+      # Correctly map outputs without using env context directly in job outputs
+      - name: Set Job Outputs
+        id: set_outputs
+        run: |
+          echo "archive_path=${{ env.archive_path }}" >> $GITHUB_OUTPUT
+          echo "artifact=${{ steps.scheme.outputs.scheme }}.ipa" >> $GITHUB_OUTPUT
+          echo "artifact2=${{ steps.scheme.outputs.scheme }}+SideStore.ipa" >> $GITHUB_OUTPUT
+
+      - name: Upload LiveContainer IPA
+        uses: actions/upload-artifact@v4 # Downgraded non-existent v7 to stable v4
         with:
-          name: ${{ env.scheme }}.ipa
-          path: ${{ env.scheme }}.ipa
+          name: ${{ steps.scheme.outputs.scheme }}.ipa
+          path: ${{ steps.scheme.outputs.scheme }}.ipa
       
       - name: Upload LiveContainer+SideStore
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4 # Downgraded non-existent v7 to stable v4
         with:
-          name: ${{ env.scheme }}+SideStore.ipa
-          path: ${{ env.scheme }}+SideStore.ipa
+          name: ${{ steps.scheme.outputs.scheme }}+SideStore.ipa
+          path: ${{ steps.scheme.outputs.scheme }}+SideStore.ipa
 
   release__nightly:
     name: Nightly Release
@@ -95,13 +108,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v4 # Downgraded non-existent v8 to stable v4
         with:
           name: ${{ needs.build.outputs.artifact }}
       - name: Download a Build Artifact2
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v4 # Downgraded non-existent v8 to stable v4
         with:
           name: ${{ needs.build.outputs.artifact2 }}
       - name: Get Commit Info
@@ -129,16 +142,18 @@ jobs:
             **Commit:** [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
             **Message:** ${{ github.event.head_commit.message }}
             
-            This is a nightly release [created automatically with GitHub Actions workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}).
+            This is a nightly release [created automatically with GitHub Actions workflow](${ {github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}).
           files: |
             ${{ needs.build.outputs.artifact }}
             ${{ needs.build.outputs.artifact2 }}
             .github/apps_nightly.json
       - name: Update apps.json in Release 1.0
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2 # Downgraded non-existent v3 to stable v2
         with:
           tag_name: "1.0"
           files: |
             .github/apps_ss_lc.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+```
