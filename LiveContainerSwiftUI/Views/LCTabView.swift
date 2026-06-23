@@ -183,6 +183,8 @@ struct LCTabView: View {
                 sharedModel.selectedTab = .settings
             case "source":
                 sharedModel.selectedTab = .sources
+            case "vpnready":
+                LocalDevVPNBridge.shared.handleVPNReadyCallback()
             default:
                 return
             }
